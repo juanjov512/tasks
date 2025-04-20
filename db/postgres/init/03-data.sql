@@ -1,6 +1,6 @@
-INSERT INTO users (email, username, created_at, updated_at) VALUES
-('user1@example.com', 'johndoe', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-('user2@example.com', 'janedoe', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO users (email, username, password_hash, created_at, updated_at) VALUES
+('user1@example.com', 'johndoe', '$2b$12$EixZaYVK1fsbw1ZfbX3OXePaWxn96p36WQoeG6Lruj3vjPGga31lW', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('user2@example.com', 'janedoe', '$2b$12$EixZaYVK1fsbw1ZfbX3OXePaWxn96p36WQoeG6Lruj3vjPGga31lW', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 INSERT INTO categories (name, color, created_at) VALUES
 ('Trabajo', '#3b82f6', CURRENT_TIMESTAMP),
