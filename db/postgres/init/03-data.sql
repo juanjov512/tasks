@@ -1,16 +1,20 @@
-INSERT INTO users (email, username, password_hash, created_at, updated_at) VALUES
-('user1@example.com', 'johndoe', '$2b$12$EixZaYVK1fsbw1ZfbX3OXePaWxn96p36WQoeG6Lruj3vjPGga31lW', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-('user2@example.com', 'janedoe', '$2b$12$EixZaYVK1fsbw1ZfbX3OXePaWxn96p36WQoeG6Lruj3vjPGga31lW', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO roles (name, created_at) VALUES
+('admin', CURRENT_TIMESTAMP),
+('user', CURRENT_TIMESTAMP);
 
-INSERT INTO categories (name, color, created_at) VALUES
-('Trabajo', '#3b82f6', CURRENT_TIMESTAMP),
-('Personal', '#10b981', CURRENT_TIMESTAMP),
-('Estudio', '#f59e0b', CURRENT_TIMESTAMP);
+INSERT INTO users (email, username, password_hash, role_id, created_at, updated_at) VALUES
+('user1@example.com', 'johndoe', '$2b$12$EixZaYVK1fsbw1ZfbX3OXePaWxn96p36WQoeG6Lruj3vjPGga31lW', (SELECT id FROM roles WHERE name = 'admin'), CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('user2@example.com', 'janedoe', '$2b$12$EixZaYVK1fsbw1ZfbX3OXePaWxn96p36WQoeG6Lruj3vjPGga31lW', (SELECT id FROM roles WHERE name = 'user'), CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
-INSERT INTO labels (name, color, created_at) VALUES
-('Urgente', '#ef4444', CURRENT_TIMESTAMP),
-('Importante', '#f97316', CURRENT_TIMESTAMP),
-('Proyecto', '#8b5cf6', CURRENT_TIMESTAMP);
+INSERT INTO categories (name, created_at) VALUES
+('Trabajo', CURRENT_TIMESTAMP),
+('Personal', CURRENT_TIMESTAMP),
+('Estudio', CURRENT_TIMESTAMP);
+
+INSERT INTO labels (user_id, name, color, created_at) VALUES
+((SELECT id FROM users WHERE email = 'user1@example.com'), 'Urgente', '#ef4444', CURRENT_TIMESTAMP),
+((SELECT id FROM users WHERE email = 'user1@example.com'), 'Importante', '#f97316', CURRENT_TIMESTAMP),
+((SELECT id FROM users WHERE email = 'user2@example.com'), 'Proyecto', '#8b5cf6', CURRENT_TIMESTAMP);
 
 INSERT INTO tasks (user_id, category_id, title, content, due_date, status, priority, created_at, updated_at)
 VALUES (
@@ -39,13 +43,13 @@ VALUES (
 INSERT INTO task_labels (task_id, label_id)
 VALUES (
   (SELECT id FROM tasks WHERE title = 'Terminar informe mensual'),
-  (SELECT id FROM labels WHERE name = 'Urgente')
+  (SELECT id FROM labels WHERE name = 'Urgente' AND user_id = (SELECT id FROM users WHERE email = 'user1@example.com'))
 ),
 (
   (SELECT id FROM tasks WHERE title = 'Terminar informe mensual'),
-  (SELECT id FROM labels WHERE name = 'Importante')
+  (SELECT id FROM labels WHERE name = 'Importante' AND user_id = (SELECT id FROM users WHERE email = 'user1@example.com'))
 ),
 (
   (SELECT id FROM tasks WHERE title = 'Comprar regalos navideños'),
-  (SELECT id FROM labels WHERE name = 'Importante')
+  (SELECT id FROM labels WHERE name = 'Proyecto' AND user_id = (SELECT id FROM users WHERE email = 'user2@example.com'))
 );

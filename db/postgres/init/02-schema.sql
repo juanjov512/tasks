@@ -1,10 +1,17 @@
 \c tasksdatabase
 
+CREATE TABLE roles (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(20) NOT NULL UNIQUE,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,
     email VARCHAR(255) UNIQUE NOT NULL,
     username VARCHAR(50) UNIQUE,
     password_hash VARCHAR(128) NOT NULL,
+    role_id INTEGER REFERENCES roles(id) ON DELETE SET NULL DEFAULT (SELECT id FROM roles WHERE name = 'user'),
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
@@ -12,12 +19,12 @@ CREATE TABLE users (
 CREATE TABLE categories (
     id SERIAL PRIMARY KEY,
     name VARCHAR(50) NOT NULL,
-    color VARCHAR(7) DEFAULT '#2563eb',
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE labels (
     id SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
     name VARCHAR(50) NOT NULL,
     color VARCHAR(7) DEFAULT '#94a3b8',
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
@@ -45,7 +52,9 @@ CREATE TABLE task_labels (
 );
 
 -- Index to improve query performance
+CREATE INDEX idx_users_role_id ON users(role_id);
 CREATE INDEX idx_tasks_user_id ON tasks(user_id);
 CREATE INDEX idx_tasks_category_id ON tasks(category_id);
 CREATE INDEX idx_tasks_status ON tasks(status);
 CREATE INDEX idx_tasks_due_date ON tasks(due_date);
+CREATE INDEX idx_labels_user_id ON labels(user_id);
