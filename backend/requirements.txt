@@ -9,3 +9,5 @@ pydantic==2.6.1
 pydantic[email]==2.6.1
 email-validator==2.1.0.post1
 flask-cors==4.0.0
+pytest==8.0.0
+pytest-cov==4.1.0
