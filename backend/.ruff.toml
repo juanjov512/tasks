@@ -1,15 +1,16 @@
-# Configuración base
+# Base configuration
 line-length = 120
 target-version = "py311"
 
-# Configuración de formato
+# Format configuration
 [format]
 quote-style = "double"
 indent-style = "space"
 line-ending = "auto"
 
-# Configuración de linting
+# Linting configuration
 [lint]
+# Selected rules
 select = [
     "E",   # pycodestyle
     "F",   # pyflakes
@@ -21,10 +22,10 @@ select = [
     "RUF", # ruff-specific
 ]
 
-# Ignorar reglas que entran en conflicto con black
+# Ignore rules that conflict with black
 ignore = ["E203", "E501"]
 
-# Ignorar archivos específicos
+# Ignore specific files
 exclude = [
     ".git",
     ".ruff_cache",
@@ -37,11 +38,11 @@ exclude = [
     ".env.*",
 ]
 
-# Configuración de reglas específicas
+# File-specific rules
 [lint.per-file-ignores]
 "__init__.py" = ["F401"]
 "tests/*" = ["S101"]
 
-# Configuración de isort
+# isort configuration
 [lint.isort]
 known-first-party = ["app"]
