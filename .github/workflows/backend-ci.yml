@@ -60,8 +60,7 @@ jobs:
           python -m pytest tests/ --cov=app --cov-report=xml || echo "::warning::Tests failed or no tests found"
 
       - name: Upload coverage to Codecov
-        if: success() || failure()
+        if: success()
         uses: codecov/codecov-action@v4
         with:
           file: ./coverage.xml
-          fail_ci_if_error: false
