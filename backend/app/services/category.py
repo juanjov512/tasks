@@ -13,12 +13,14 @@ class CategoryService:
     @staticmethod
     def get_all_categories() -> list[CategoryResponse]:
         categories = Category.query.all()
-        return [CategoryResponse.model_validate(cat) for cat in categories]
+        return [
+            {**CategoryResponse.model_validate(cat).model_dump(), "task_count": len(cat.tasks)} for cat in categories
+        ]
 
     @staticmethod
     def get_category_by_id(category_id: int) -> CategoryResponse:
         category = Category.query.get_or_404(category_id)
-        return CategoryResponse.model_validate(category)
+        return {**CategoryResponse.model_validate(category).model_dump(), "task_count": len(category.tasks)}
 
     @staticmethod
     def create_category(data: dict[str, Any]) -> CategoryResponse:

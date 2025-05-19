@@ -1,12 +1,13 @@
-from authz.decorators import role_required
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required
-from services.category import CategoryService
 
-category_bp = Blueprint("category", __name__)
+from ..authz.decorators import role_required
+from ..services.category import CategoryService
+
+category_bp = Blueprint("categories", __name__)
 
 
-@category_bp.route("/categories", methods=["GET"])
+@category_bp.route("/", methods=["GET"])
 @jwt_required()
 def get_categories():
     try:
@@ -16,7 +17,7 @@ def get_categories():
         return jsonify({"error": str(e)}), 500
 
 
-@category_bp.route("/categories/<int:category_id>", methods=["GET"])
+@category_bp.route("/<int:category_id>", methods=["GET"])
 @jwt_required()
 def get_category(category_id):
     try:
@@ -26,7 +27,7 @@ def get_category(category_id):
         return jsonify({"error": str(e)}), 404
 
 
-@category_bp.route("/categories", methods=["POST"])
+@category_bp.route("/", methods=["POST"])
 @jwt_required()
 @role_required(["admin"])
 def create_category():
@@ -40,7 +41,7 @@ def create_category():
         return jsonify({"error": str(e)}), 500
 
 
-@category_bp.route("/categories/<int:category_id>", methods=["PUT"])
+@category_bp.route("/<int:category_id>", methods=["PUT"])
 @jwt_required()
 @role_required(["admin"])
 def update_category(category_id):
@@ -54,7 +55,7 @@ def update_category(category_id):
         return jsonify({"error": str(e)}), 500
 
 
-@category_bp.route("/categories/<int:category_id>", methods=["DELETE"])
+@category_bp.route("/<int:category_id>", methods=["DELETE"])
 @jwt_required()
 @role_required(["admin"])
 def delete_category(category_id):
